@@ -1,68 +1,87 @@
-from game.casting.color import Color
-
 # -------------------------------------------------------------------------------------------------- 
 # GENERAL GAME CONSTANTS
 # -------------------------------------------------------------------------------------------------- 
 
 # GAME
-GAME_NAME = "Batter"
-FRAME_RATE = 60
+GAME_NAME = "Tetromino"
+FPS = 25 # FRAME RATE
 
 # SCREEN
-SCREEN_WIDTH = 1040
-SCREEN_HEIGHT = 680
-CENTER_X = SCREEN_WIDTH / 2
-CENTER_Y = SCREEN_HEIGHT / 2
+WINDOWWIDTH = 640
+WINDOWHEIGHT = 480
+BOXSIZE = 20
+BOARDWIDTH = 10
+BOARDHEIGHT = 20
+BLANK = '.'
 
-# FIELD
-FIELD_TOP = 60
-FIELD_BOTTOM = SCREEN_HEIGHT
-FIELD_LEFT = 0
-FIELD_RIGHT = SCREEN_WIDTH
+# FRAME RATE MOVEMENT - HOLDING DOWN KEYS
+MOVESIDEWAYSFREQ = 0.15
+MOVEDOWNFREQ = 0.1
 
-# FONT
-FONT_FILE = "batter/assets/fonts/zorque.otf"
-FONT_SMALL = 32
-FONT_LARGE = 48
+# PADDING LEFT, RIGHT, and TOP
+XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE) / 2)
+TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGHT * BOXSIZE) - 5
+
+# COLORS        R    G    B
+WHITE       = (255, 255, 255)
+GRAY        = (185, 185, 185)
+BLACK       = (  0,   0,   0)
+RED         = (155,   0,   0)
+LIGHTRED    = (175,  20,  20)
+GREEN       = (  0, 155,   0)
+LIGHTGREEN  = ( 20, 175,  20)
+BLUE        = (  0,   0, 155)
+LIGHTBLUE   = ( 20,  20, 175)
+YELLOW      = (155, 155,   0)
+LIGHTYELLOW = (175, 175,  20)
+
+# BOARD GAME COLORS
+BORDERCOLOR = BLUE
+BGCOLOR = BLACK
+TEXTCOLOR = WHITE
+TEXTSHADOWCOLOR = GRAY
+COLORS      = (     BLUE,      GREEN,      RED,      YELLOW)
+LIGHTCOLORS = (LIGHTBLUE, LIGHTGREEN, LIGHTRED, LIGHTYELLOW)
+assert len(COLORS) == len(LIGHTCOLORS) # each color must have light color
+
+
+# ********* FONT *********
+FONT_FILE = "tetris/assets/fonts/freesansbold.ttf"
+FONT_SMALL = 18
+FONT_LARGE = 100
 
 # SOUND
-BOUNCE_SOUND = "batter/assets/sounds/boing.wav"
-WELCOME_SOUND = "batter/assets/sounds/start.wav"
-OVER_SOUND = "batter/assets/sounds/over.wav"
+TETRIS_0_MUSIC = "tetris/assets/sounds/0_tetris.mid"
+TETRIS_1_MUSIC = "tetris/assets/sounds/1_tetris.mid"
 
-# TEXT
+# ********* TEXT *********
 ALIGN_CENTER = 0
 ALIGN_LEFT = 1
 ALIGN_RIGHT = 2
 
-# COLORS
-BLACK = Color(0, 0, 0)
-WHITE = Color(255, 255, 255)
-PURPLE = Color(255, 0, 255)
-
-# KEYS
+# ********* KEYS *********
 LEFT = "left"
 RIGHT = "right"
 SPACE = "space"
 ENTER = "enter"
 PAUSE = "p"
 
-# SCENES
+# ********* SCENES *********
 NEW_GAME = 0
 TRY_AGAIN = 1
 NEXT_LEVEL = 2
 IN_PLAY = 3
 GAME_OVER = 4
 
-# LEVELS
-LEVEL_FILE = "batter/assets/data/level-{:03}.txt"
+# ********* LEVELS *********
 BASE_LEVELS = 5
+
 
 # -------------------------------------------------------------------------------------------------- 
 # SCRIPTING CONSTANTS
 # -------------------------------------------------------------------------------------------------- 
 
-# PHASES
+# ********* PHASES *********
 INITIALIZE = 0
 LOAD = 1
 INPUT = 2
@@ -71,16 +90,17 @@ OUTPUT = 4
 UNLOAD = 5
 RELEASE = 6
 
+
 # -------------------------------------------------------------------------------------------------- 
 # CASTING CONSTANTS
 # -------------------------------------------------------------------------------------------------- 
 
-# STATS
+# ********* STATS *********
 STATS_GROUP = "stats"
 DEFAULT_LIVES = 3
 MAXIMUM_LIVES = 5
 
-# HUD
+# ********* HUD *********
 HUD_MARGIN = 15
 LEVEL_GROUP = "level"
 LIVES_GROUP = "lives"
@@ -89,36 +109,130 @@ LEVEL_FORMAT = "LEVEL: {}"
 LIVES_FORMAT = "LIVES: {}"
 SCORE_FORMAT = "SCORE: {}"
 
-# BALL
-BALL_GROUP = "balls"
-BALL_IMAGE = "batter/assets/images/000.png"
-BALL_WIDTH = 28
-BALL_HEIGHT = 28
-BALL_VELOCITY = 6
+# TETROMINO SIZE
+TEMPLATEWIDTH = 5
+TEMPLATEHEIGHT = 5
 
-# RACKET
-RACKET_GROUP = "rackets"
-RACKET_IMAGES = [f"batter/assets/images/{n:03}.png" for n in range(100, 103)]
-RACKET_WIDTH = 106
-RACKET_HEIGHT = 28
-RACKET_RATE = 6
-RACKET_VELOCITY = 7
+# TETROMINO - GEOMETRIC SHAPES
+S_SHAPE_TEMPLATE = [['.....',
+                     '.....',
+                     '..OO.',
+                     '.OO..',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '..OO.',
+                     '...O.',
+                     '.....']]
 
-# BRICK
-BRICK_GROUP = "bricks"
-BRICK_IMAGES = {
-    "b": [f"batter/assets/images/{i:03}.png" for i in range(10,19)],
-    "g": [f"batter/assets/images/{i:03}.png" for i in range(20,29)],
-    "p": [f"batter/assets/images/{i:03}.png" for i in range(30,39)],
-    "y": [f"batter/assets/images/{i:03}.png" for i in range(40,49)]
-}
-BRICK_WIDTH = 80
-BRICK_HEIGHT = 28
-BRICK_DELAY = 0.5
-BRICK_RATE = 4
-BRICK_POINTS = 50
 
-# DIALOG
+Z_SHAPE_TEMPLATE = [['.....',
+                     '.....',
+                     '.OO..',
+                     '..OO.',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '.OO..',
+                     '.O...',
+                     '.....']]
+
+
+I_SHAPE_TEMPLATE = [['..O..',
+                     '..O..',
+                     '..O..',
+                     '..O..',
+                     '.....'],
+                    ['.....',
+                     '.....',
+                     'OOOO.',
+                     '.....',
+                     '.....']]
+
+
+O_SHAPE_TEMPLATE = [['.....',
+                     '.....',
+                     '.OO..',
+                     '.OO..',
+                     '.....']]
+
+
+J_SHAPE_TEMPLATE = [['.....',
+                     '.O...',
+                     '.OOO.',
+                     '.....',
+                     '.....'],
+                    ['.....',
+                     '..OO.',
+                     '..O..',
+                     '..O..',
+                     '.....'],
+                    ['.....',
+                     '.....',
+                     '.OOO.',
+                     '...O.',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '..O..',
+                     '.OO..',
+                     '.....']]
+
+
+L_SHAPE_TEMPLATE = [['.....',
+                     '...O.',
+                     '.OOO.',
+                     '.....',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '..O..',
+                     '..OO.',
+                     '.....'],
+                    ['.....',
+                     '.....',
+                     '.OOO.',
+                     '.O...',
+                     '.....'],
+                    ['.....',
+                     '.OO..',
+                     '..O..',
+                     '..O..',
+                     '.....']]
+
+
+T_SHAPE_TEMPLATE = [['.....',
+                     '..O..',
+                     '.OOO.',
+                     '.....',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '..OO.',
+                     '..O..',
+                     '.....'],
+                    ['.....',
+                     '.....',
+                     '.OOO.',
+                     '..O..',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '.OO..',
+                     '..O..',
+                     '.....']]
+
+
+SHAPES = {'S': S_SHAPE_TEMPLATE, 
+          'Z': Z_SHAPE_TEMPLATE,
+          'J': J_SHAPE_TEMPLATE,
+          'L': L_SHAPE_TEMPLATE,
+          'I': I_SHAPE_TEMPLATE,
+          'O': O_SHAPE_TEMPLATE,
+          'T': T_SHAPE_TEMPLATE}
+
+
+# ********* DIALOG *********
 DIALOG_GROUP = "dialogs"
 ENTER_TO_START = "PRESS ENTER TO START"
 PREP_TO_LAUNCH = "PREPARING TO LAUNCH"

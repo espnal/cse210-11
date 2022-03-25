@@ -1,3 +1,6 @@
+import random, time, pygame, sys
+from pygame.locals import *
+
 from constants import *
 from game.casting.cast import Cast
 from game.directing.scene_manager import SceneManager
